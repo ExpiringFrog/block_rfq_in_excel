@@ -1,12 +1,14 @@
 # Prerequisites
 1. Install Python: via the Microsoft store (recommended) or https://www.python.org/ftp/python/3.12.8/python-3.12.8-amd64.exe
-2. Install Git: https://git-scm.com/download/win
+2. Install Git: https://git-scm.com/download/win.
+- - The code can also be downloaded with the green button above as a ZIP file to avoid needing Git.
 
 # Installation
 1. Open Powershell: Press the Windows key, then type "Powershell" and press Enter when the application appears
 2. Clone the repository: `git clone https://github.com/ExpiringFrog/block_rfq_in_excel`
-3. Move into the new folder: `cd block_rfq_in_excel`
-4. Install Python libraries: `pip install -r requirements.txt`
+- - If you opted to avoid Git, simple unzip the zip file in the desired location.
+4. Move into the new folder: `cd block_rfq_in_excel`
+5. Install Python libraries: `pip install -r requirements.txt`
 
 # Configuration
 1. Open the `block_rfq_in_excel` folder in Windows Explorer
