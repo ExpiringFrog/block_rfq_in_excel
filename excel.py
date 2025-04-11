@@ -1,5 +1,6 @@
 import logging
 import configparser
+import json
 
 import xlwings as xw
 import pandas as pd
@@ -12,6 +13,7 @@ class ExcelConnector:
         config.read("config.ini")
         file_path = config.get("Excel", "file_path")
         sheet_name = config.get("Excel", "sheet_name")
+        self.currency_filter = json.loads(config.get("Filters", "currencies"))
 
         self.sheet_conn = xw.Book(file_path).sheets[sheet_name]
         self.clean_sheet()
@@ -46,6 +48,7 @@ class ExcelConnector:
         block_rfq_dict_list = []
 
         for block_rfq in block_rfq_dict.values():
+            filtered = False
             entry = {
                 "RfqID": block_rfq.id,
                 "LongName": block_rfq.name,
@@ -56,6 +59,8 @@ class ExcelConnector:
             }
             i = 1
             for leg in block_rfq.legs.legs:
+                if not leg.instrument_name.startswith(tuple(self.currency_filter)):
+                    filtered = True
                 entry[f"Leg{i}"] = leg.instrument_name
                 entry[f"nLeg{i}"] = leg.ratio
                 i += 1
@@ -64,7 +69,8 @@ class ExcelConnector:
                 entry["HedgeLevel"] = block_rfq.hedge.price
                 entry["nHedgeLeg"] = block_rfq.hedge.amount
 
-            block_rfq_dict_list.append(entry)
+            if not filtered:
+                block_rfq_dict_list.append(entry)
 
         df = pd.DataFrame(block_rfq_dict_list)
         if not df.empty:
